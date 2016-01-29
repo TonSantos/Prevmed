@@ -57,18 +57,27 @@ public class PrincipalController {
 	@Post("/resultado")
 	public void analise(List<Long> selecionados){
 		//realiza a analise de medicamentos e retorna o resultado da interacao
-		
-		if(selecionados!=null && selecionados.size() > 1){//se existe pelo menos dois id de medicamentos
-			InteracaoDAO dao = new InteracaoDAO();
-			ArrayList<Interacao> interacoes = new ArrayList<Interacao>();
-			interacoes = dao.retornaInteracao(selecionados);			
+		if(selecionados!=null && selecionados.size() > 0){//se existe pelo menos um id de medicamentos
 			
-			result.include("interacoes", interacoes);			
-			result.forwardTo(this).interacoes();
-			
+			if(selecionados.size() == 1){//se for apenas um
+				
+				InteracaoDAO dao = new InteracaoDAO();
+				ArrayList<Interacao> interacoes = new ArrayList<Interacao>();
+				interacoes = dao.umInteracao(selecionados.get(0));			
+				
+				result.include("interacoes", interacoes);			
+				result.forwardTo(this).interacoes();
+			}else{
+				InteracaoDAO dao = new InteracaoDAO();
+				ArrayList<Interacao> interacoes = new ArrayList<Interacao>();
+				interacoes = dao.retornaInteracao(selecionados);			
+				
+				result.include("interacoes", interacoes);			
+				result.forwardTo(this).interacoes();
+			}
 		}else{
 			
-			validator.add(new ValidationMessage("Marque pelo menos dois medicamentos para analise!", "Atencao!"));
+			validator.add(new ValidationMessage("Marque pelo menos um medicamento para analise!", "Atencao!"));
 			validator.onErrorRedirectTo(this).inicio();
 						
 		}

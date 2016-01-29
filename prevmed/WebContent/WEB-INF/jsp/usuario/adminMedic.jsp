@@ -127,8 +127,8 @@
 		                      <form action="${pageContext.request.contextPath}/medicamento-atualizado" method="post">
 		                      <div class="modal-body">
 		                      	  <p>Edite o nome do medicamento e clique em OK</p>
-                            	  <input type="text" name="${medicamentos.nome}" placeholder="${medicamentos.nome}" autocomplete="off" class="form-control placeholder-no-fix" value="${medicamentos.nome}">
-		                     	  <input type="hidden" name="${medicamentos.id}" value="${medicamentos.id}">
+                            	  <input type="text" name="medicamento" placeholder="${medicamentos.nome}" autocomplete="off" class="form-control placeholder-no-fix" value="${medicamentos.nome}">
+                            	  <input type="hidden" name="id" value="${medicamentos.id}">                    	  
 		                      </div>
 		                      <div class="modal-footer">
 		                      	  <button data-dismiss="modal" class="btn btn-default" type="button">Cancelar</button>

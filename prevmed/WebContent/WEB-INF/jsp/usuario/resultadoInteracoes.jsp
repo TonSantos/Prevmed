@@ -132,6 +132,7 @@
 		                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		                          <h4 class="modal-title"> Editar </h4>
 		                      </div>
+		                      <form action="${pageContext.request.contextPath}/adicionar-interacao" method="post">
 		                      <div class="form-panel">
 		                      <h4 class="mb">Edite as informacoes da interacao dos medicamentos e clique em OK</h4>
 		                       <p><i class="fa fa-caret-right"></i><b> Grau da interação: </b>
@@ -189,6 +190,7 @@
 		                      	  <button data-dismiss="modal" class="btn btn-default" type="button">Cancelar</button>
 		                          <button data-dismiss="modal" class="btn btn-theme" type="button">Ok</button>		                          
 		                      </div>
+		                      </form>
 		                  </div>
 		              </div>
 		          </div>

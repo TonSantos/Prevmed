@@ -3,6 +3,7 @@ package br.com.sistema.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -33,7 +34,7 @@ public class MedicamentoDAO {
 		    	      .uniqueResult();	
 			
 			if(verific==null){//se nao existir no banco
-				session.saveOrUpdate(medicamento);   //salva o medicamento
+				session.save(medicamento);   //salva o medicamento
 				tx.commit();
 				System.out.println("medicamento salvo!!");
 				status = true;
@@ -82,26 +83,27 @@ public class MedicamentoDAO {
 	
 	public boolean atualizaMedicamento(Medicamento medicamento){
 		boolean status = false;
-		 session = Sessao.getSessao();//abre sessao
-		 System.out.println("salvar medicamento!");
-		 Transaction tx = session.beginTransaction();
-		 
-		//tentar carrega medicamento
-			Medicamento verific = (Medicamento) session.createCriteria(Medicamento.class)
-		    	      .add(Restrictions.eq("id", medicamento.getId()))	 	    	     
-		    	      .uniqueResult();	
 			
-			if(verific!=null){//se existir no banco
-				Query query = session.createQuery("update medicamentos set nome = :med_name" +
-	    				" where id = :med_id");
-							query.setParameter("med_name", medicamento.getNome());
-							query.setParameter("med_id", medicamento.getId());
-							int result = query.executeUpdate();
-
-
-				System.out.println("medicamento atualizado!!");
-				status = true;			
-			}
+		session = Sessao.getSessao();//abre sessao
+		Transaction tx = session.beginTransaction(); 	
+		 	/*if(deletarMedicamento(medicamento.getId())){
+		 		
+		 		session = Sessao.getSessao();//abre sessao
+			 	System.out.println("salvar medicamento!");
+			 	Transaction tx = session.beginTransaction();	*/	 	
+		 	
+		 	try{
+		 		medicamento.setDataCriacao();
+		 		session.update(medicamento);
+		 		tx.commit();
+			 	session.clear();
+			 	 status = true;
+	        }catch(HibernateException he){
+	            System.out.println("Exceção em Banco de dados - atualizar Medicamento");
+	           
+	        }
+		 	
+		 	
 			session.disconnect();			
 			session.close();					
 			System.out.println("fechado sessao!!");

@@ -32,7 +32,7 @@ public class UsuarioController {
 	
 	@Post("/medicamentos")
 	public void adminMedic() {
-	
+		//tabela de medicamentos
 	}
 	
 	
@@ -79,10 +79,15 @@ public class UsuarioController {
 	}
 	
 	@Post("/medicamento-atualizado")
-	public void atualizar(Medicamento medicamentos){
+	public void atualizar(String medicamento, Long id){
 		
 		MedicamentoDAO dao = new MedicamentoDAO();
-		if(dao.atualizaMedicamento(medicamentos)){
+		Medicamento m = new Medicamento();
+		m.setNome(medicamento);
+		m.setId(id);
+		
+		
+		if(dao.atualizaMedicamento(m)){
 			String infor = "Medicamento atualizado com sucesso!";
 			String status = "alert alert-success";
 			String icon = "fa fa-check-circle";
@@ -102,6 +107,12 @@ public class UsuarioController {
 			result.forwardTo(this).carregar();
 		}
 	}
+	
+	@Post("/interacao-atualizado")
+	public void atualizarInteracao(){
+		//controle de atualização da interação
+	}
+	
 	@Post("/medicamento")
 	public void apagar(Long id){
 		
