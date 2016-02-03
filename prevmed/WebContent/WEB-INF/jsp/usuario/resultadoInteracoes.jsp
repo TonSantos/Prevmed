@@ -14,7 +14,6 @@
 	<link href="<c:url value="/resource/css/style-responsive.css"/>" rel="stylesheet">
 	<link href="//cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css" rel="stylesheet">
 	<link href="<c:url value="/resource/css/to-do.css"/>" rel="stylesheet">
-	
 </head>
 <body>
 	<!--header start-->
@@ -22,7 +21,8 @@
       <!-- LOGIN -->
              <div class="top-menu">
             	<ul class="nav pull-right top-menu">
-            		<li><a class="logo">${user}</a></li>
+            		<li><a class="logo"><i class="fa fa-user"></i>
+            		 ${user}</a></li>
                     <li><a class="logout" href="${pageContext.request.contextPath}/login">Sair <i class="fa fa-sign-out"></i> </a></li>
             	</ul>
             </div>
@@ -30,22 +30,7 @@
             <div align="left">               
             <a class="top-menu" ><img src="<c:url value="/resource/images/logo-drug.png"/>" alt="" /></a>           
             <a class="logo" href="${pageContext.request.contextPath}/painel"><b>PREVMED</b></a>                                              
-            </div> 
-            <div align="center">
-            <c:forEach var="error" items="${errors}">
-						<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i>
-						  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						  <strong>Atenção! </strong>${error.message}
-						</div>      				      				
-			</c:forEach>
-			<c:forEach var="infor" items="${infor}">
-						<div class="${status}"><i class="${icon}"></i>
-						  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						  ${infor}
-						</div>      				      				
-			</c:forEach>
-			</div>   
-            
+            </div>          
             
                           
        </header>
@@ -64,6 +49,20 @@
 	                        
 	                        <br>
 	                        <hr>
+	                        <div align="center">
+            <c:forEach var="error" items="${errors}">
+						<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i>
+						  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						  <strong>Atenção! </strong>${error.message}
+						</div>      				      				
+			</c:forEach>
+			<c:forEach var="infor" items="${infor}">
+						<div class="${status}"><i class="${icon}"></i>
+						  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						  ${infor}
+						</div>      				      				
+			</c:forEach>
+			</div> 
 	                        <div class=" add-task-row">
                           		 	<a id="id_button_add" class="btn btn-success btn-sm pull-right"  data-toggle="modal" href="#myModalAdd"><i class="fa fa-plus-circle"></i> Adicionar interação</a>                    		  	
                           	  </div>
@@ -124,76 +123,117 @@
 		                  </div>
 		              </div>
 		          </div>
-		           <!-- modal de editar -->   
-		          <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModalEditar${loop.index}" class="modal fade">
+		          
+		           <!-- modal de editar --> 		        
+		           <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModalEditar${loop.index}" class="modal fade">
 		              <div class="modal-dialog">
 		                  <div class="modal-content">
 		                      <div class="modal-header">
 		                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		                          <h4 class="modal-title"> Editar </h4>
+		                          <h4 class="modal-title"> Editar Interação </h4>
 		                      </div>
-		                      <form action="${pageContext.request.contextPath}/adicionar-interacao" method="post">
+		                      <form action="${pageContext.request.contextPath}/interacao-atualizado" method="post">
 		                      <div class="form-panel">
-		                      <h4 class="mb">Edite as informacoes da interacao dos medicamentos e clique em OK</h4>
-		                       <p><i class="fa fa-caret-right"></i><b> Grau da interação: </b>
-		                      	  <div class="btn-group">		                      	 
-						 			 <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown"><i class="fa fa-exclamation-triangle"></i>
-						   				 Grau da interacao <span class="caret"></span>
-						 			 </button>
-						 			 <ul class="dropdown-menu" role="menu">
-						 			 	<li><a href="#" data-value="Nao-especificado"><i class="fa fa-exclamation-triangle" style="color:#B2B2B2"></i> Não-especificado</a></li>
-						   		 		<li><a href="#" data-value="Leve"><i class="fa fa-exclamation-triangle" style="color:#428BCA"></i> Leve</a></li>
-						    	 		<li><a href="#" data-value="Moderada"><i class="fa fa-exclamation-triangle" style="color:#FFD561"></i> Moderada</a></li>
-						    		 	<li><a href="#" data-value="Grave"><i class="fa fa-exclamation-triangle" style="color:#E54444"></i> Grave</a></li>						    	 		
-						  			</ul>
-								</div>
-								<hr>										                         
-		                          <p><i class="fa fa-caret-right"></i><b> Medicamentos: </b><div class="btn-group">
+		                      <h4 class="mb">Edite as informacoes das interacoes dos medicamentos::</h4>
+		                      									                         
+		                          <i class="fa fa-caret-right"></i><b> Medicamentos: </b>
+		                          <input type="hidden" name="interacao.id_medicA" id="grauMedA${loop.index}" value="${interacoes.id_medicA}">
+		                          <input type="hidden" name="interacao.id_medicB" id="grauMedB${loop.index}" value="${interacoes.id_medicB}">
+		                          <div class="btn-group">
 						 			 <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
 						   				 ${interacoes.medicamentoA} <span class="caret"></span>
 						 			 </button>
 						 			 <ul class="dropdown-menu" role="menu">
 						 			 	<c:forEach var="medicamentos" items="${medicamentos}" varStatus="loop2">
-						 			 		<li><a href="#" data-value="${medicamentos.nome}"> ${medicamentos.nome}</a></li>
+						 			 		<li onclick="$('#grauMedA${loop.index}').val('${medicamentos.id}');">
+						 			 			<a href="#" data-value="${medicamentos.id}"> ${medicamentos.nome}</a>
+						 			 			
+						 			 		</li>
 				    	 				</c:forEach>
 						  			</ul>
 								</div> <i class="fa fa-arrows-h"></i> <div class="btn-group">
 						 			 <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
-						   				 ${interacoes.medicamentoB} <span class="caret"></span>
+						   				${interacoes.medicamentoB}<span class="caret"></span>
 						 			 </button>
 						 			 <ul class="dropdown-menu" role="menu">
 						 			 	<c:forEach var="medicamentos" items="${medicamentos}" varStatus="loop3">
-						 			 		<li><a href="#" data-value="${medicamentos.nome}"> ${medicamentos.nome}</a></li>
+						 			 		<li onclick="$('#grauMedB${loop.index}').val('${medicamentos.id}');">
+						 			 			<a href="#" data-value="${medicamentos.id}"> ${medicamentos.nome}</a>
+						 			 			
+						 			 		</li>
 				    	 				</c:forEach>
 						  			</ul>
 								</div>
-								<hr>	
-		                          <div><i class="fa fa-caret-right"></i><b> Efeito Clínico: </b><textarea rows="3" cols="50" class="form-control">${interacoes.efeito}</textarea></div>
+								<hr>
+								<p><i class="fa fa-caret-right"></i><b> Grau da interação: </b>
+		                      <input type="hidden" name="interacao.grau" id="grauId${loop.index}" value="${interacoes.grau}">
+		                      	  <div class="btn-group">		                      	  
+						 			 <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown"><i class="fa fa-exclamation-triangle"></i>
+						   				 ${interacoes.grau} <span class="caret"></span>
+						 			 </button>
+						 			 <ul class="dropdown-menu" role="menu">
+						 			 	<li onclick="$('#grauId${loop.index}').val('Não-especificado');">
+						 			 		<a href="#" data-value="Não-especificado" ><i class="fa fa-exclamation-triangle" style="color:#B2B2B2"></i> Não-especificado</a>
+						 			 	</li>
+						   		 		<li onclick="$('#grauId${loop.index}').val('Leve');">
+						   		 			<a href="#" data-value="Leve" ><i class="fa fa-exclamation-triangle" style="color:#428BCA"></i> Leve</a>
+						   		 			
+						   		 		</li>
+						    	 		<li onclick="$('#grauId${loop.index}').val('Moderada');">
+						    	 			<a href="#" data-value="Moderada" ><i class="fa fa-exclamation-triangle" style="color:#FFD561"></i> Moderada</a>
+						    	 			
+						    	 		</li>
+						    		 	<li onclick="$('#grauId${loop.index}').val('Grave');">
+						    		 		<a href="#" data-value="Grave" ><i class="fa fa-exclamation-triangle" style="color:#E54444"></i> Grave</a>
+						    		 		
+						    		 	</li>						    	 		
+						  			</ul>
+								</div>
+								<hr>		
+		                          <div><i class="fa fa-caret-right"></i><b> Efeito Clínico: </b>
+		                         <!-- <input type="text" class="form-control" name="interacao.efeito" required="required"/>  --> 
+		                          <textarea rows="3" cols="50" class="form-control" required="required" name="interacao.efeito">${interacoes.efeito}</textarea>
+		                          </div>
 		                        <hr>  
-		                          <p><i class="fa fa-caret-right"></i><b> Início de ação: </b><div class="btn-group">
+		                          <p><i class="fa fa-caret-right"></i><b> Início de ação: </b>
+		                          <input type="hidden" name="interacao.acao" id="medAcao${loop.index}" value="${interacoes.acao}">
+		                          <div class="btn-group">
 						 			 <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
 						   				 ${interacoes.acao} <span class="caret"></span>
 						 			 </button>
 						 			 <ul class="dropdown-menu" role="menu">
-						 			 	<li><a href="#" data-value="Nao-especificado"> Nao-especificado</a></li>
-						   		 		<li><a href="#" data-value="Demorado"> Demorado</a></li>
-						    	 		<li><a href="#" data-value="Rapido"> Rapido</a></li>						    							    	 		
+						 			 	<li onclick="$('#medAcao${loop.index}').val('Nao-especificado');">
+						 			 		<a href="#" data-value="Nao-especificado"> Nao-especificado</a>
+						 			 		
+						 			 	</li>
+						   		 		<li onclick="$('#medAcao${loop.index}').val('Demorado');">
+						   		 			<a href="#" data-value="Demorado"> Demorado</a>
+						   		 			
+						   		 		</li>
+						    	 		<li onclick="$('#medAcao${loop.index}').val('Rapido');">
+						    	 			<a href="#" data-value="Rapido"> Rapido</a>
+						    	 			
+						    	 		</li>
+						    	 								    							    	 		
 						  			</ul>
 								</div>
 		                        <hr>
 		                          <p><i class="fa fa-caret-right"></i><b> Recomendação: </b>
-		                           <textarea rows="4" cols="50" class="form-control">${interacoes.recomendacao}</textarea> 
-		                          
-		
+		                          <!-- <input type="text" class="form-control" name="interacao.recomendacao" required="required"/>  -->
+		                          <textarea rows="4" cols="50" class="form-control" required="required" name="interacao.recomendacao">${interacoes.recomendacao}</textarea>
+		                          </p>
+												
 		                      </div>
 		                      <div class="modal-footer">
+		                      	 <input type="hidden" name="interacao.id" value="${interacoes.id}">
 		                      	  <button data-dismiss="modal" class="btn btn-default" type="button">Cancelar</button>
-		                          <button data-dismiss="modal" class="btn btn-theme" type="button">Ok</button>		                          
+		                          <button class="btn btn-theme" type="submit">Concluir edição</button>		                          
 		                      </div>
-		                      </form>
+		                      </form>		                      
+		                      
 		                  </div>
 		              </div>
-		          </div>
+		          </div>    
 		          <!-- fim modal editar -->
 		          
 		          <!-- modal excluir -->    		 
@@ -233,15 +273,15 @@
 		                      <h4 class="mb">Adicione as informacoes da interacao dos medicamentos::</h4>
 		                      									                         
 		                          <i class="fa fa-caret-right"></i><b> Medicamentos: </b>
-		                          <input type="hidden" name="interacao.id_medicA" id="grauMedA">
-		                          <input type="hidden" name="interacao.id_medicB" id="grauMedB">
+		                          <input type="hidden" name="interacao.id_medicA" id="grauMedAadd">
+		                          <input type="hidden" name="interacao.id_medicB" id="grauMedBadd">
 		                          <div class="btn-group">
 						 			 <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
 						   				 Medicamento 1 <span class="caret"></span>
 						 			 </button>
 						 			 <ul class="dropdown-menu" role="menu">
 						 			 	<c:forEach var="medicamentos" items="${medicamentos}" varStatus="loop2">
-						 			 		<li onclick="$('#grauMedA').val('${medicamentos.id}');">
+						 			 		<li onclick="$('#grauMedAadd').val('${medicamentos.id}');">
 						 			 			<a href="#" data-value="${medicamentos.id}"> ${medicamentos.nome}</a>
 						 			 			
 						 			 		</li>
@@ -253,7 +293,7 @@
 						 			 </button>
 						 			 <ul class="dropdown-menu" role="menu">
 						 			 	<c:forEach var="medicamentos" items="${medicamentos}" varStatus="loop3">
-						 			 		<li onclick="$('#grauMedB').val('${medicamentos.id}');">
+						 			 		<li onclick="$('#grauMedBadd').val('${medicamentos.id}');">
 						 			 			<a href="#" data-value="${medicamentos.id}"> ${medicamentos.nome}</a>
 						 			 			
 						 			 		</li>
@@ -262,24 +302,24 @@
 								</div>
 								<hr>
 								<p><i class="fa fa-caret-right"></i><b> Grau da interação: </b>
-		                      <input type="hidden" name="interacao.grau" id="grauId">
+		                      <input type="hidden" name="interacao.grau" id="grauIdadd">
 		                      	  <div class="btn-group">		                      	  
 						 			 <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown"><i class="fa fa-exclamation-triangle"></i>
 						   				 Grau da interacao <span class="caret"></span>
 						 			 </button>
 						 			 <ul class="dropdown-menu" role="menu">
-						 			 	<li onclick="$('#grauId').val('Não-especificado');">
+						 			 	<li onclick="$('#grauIdadd').val('Não-especificado');">
 						 			 		<a href="#" data-value="Não-especificado" ><i class="fa fa-exclamation-triangle" style="color:#B2B2B2"></i> Não-especificado</a>
 						 			 	</li>
-						   		 		<li onclick="$('#grauId').val('Leve');">
+						   		 		<li onclick="$('#grauIdadd').val('Leve');">
 						   		 			<a href="#" data-value="Leve" ><i class="fa fa-exclamation-triangle" style="color:#428BCA"></i> Leve</a>
 						   		 			
 						   		 		</li>
-						    	 		<li onclick="$('#grauId').val('Moderada');">
+						    	 		<li onclick="$('#grauIdadd').val('Moderada');">
 						    	 			<a href="#" data-value="Moderada" ><i class="fa fa-exclamation-triangle" style="color:#FFD561"></i> Moderada</a>
 						    	 			
 						    	 		</li>
-						    		 	<li onclick="$('#grauId').val('Grave');">
+						    		 	<li onclick="$('#grauIdadd').val('Grave');">
 						    		 		<a href="#" data-value="Grave" ><i class="fa fa-exclamation-triangle" style="color:#E54444"></i> Grave</a>
 						    		 		
 						    		 	</li>						    	 		
@@ -292,21 +332,21 @@
 		                          </div>
 		                        <hr>  
 		                          <p><i class="fa fa-caret-right"></i><b> Início de ação: </b>
-		                          <input type="hidden" name="interacao.acao" id="medAcao">
+		                          <input type="hidden" name="interacao.acao" id="medAcaoadd">
 		                          <div class="btn-group">
 						 			 <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
 						   				 Ação <span class="caret"></span>
 						 			 </button>
 						 			 <ul class="dropdown-menu" role="menu">
-						 			 	<li onclick="$('#medAcao').val('Nao-especificado');">
+						 			 	<li onclick="$('#medAcaoadd').val('Nao-especificado');">
 						 			 		<a href="#" data-value="Nao-especificado"> Nao-especificado</a>
 						 			 		
 						 			 	</li>
-						   		 		<li onclick="$('#medAcao').val('Demorado');">
+						   		 		<li onclick="$('#medAcaoadd').val('Demorado');">
 						   		 			<a href="#" data-value="Demorado"> Demorado</a>
 						   		 			
 						   		 		</li>
-						    	 		<li onclick="$('#medAcao').val('Rapido');">
+						    	 		<li onclick="$('#medAcaoadd').val('Rapido');">
 						    	 			<a href="#" data-value="Rapido"> Rapido</a>
 						    	 			
 						    	 		</li>
@@ -338,7 +378,14 @@
                       </section>
                   </div><!--/col-md-12 -->
               </div><!-- /row -->
-				  								              		   			 	
+				<footer class="site-footer">
+          <div class="text-center">
+              2016 - Ton Santos
+              <a href="#" class="go-top">
+                  <i class="fa fa-angle-up"></i>
+              </a>
+          </div>
+      </footer>  								              		   			 	
  </section>
 		   			      		      	 			  		
 	 	</div>		 
@@ -363,17 +410,6 @@
 
 		</script>
  		  	
- 		
- 		<script>
-      		jQuery(document).ready(function() {
-         	 TaskList.initTaskWidget();
-     		 });
-
-      		$(function() {
-          		$( "#sortable" ).sortable();
-          		$( "#sortable" ).disableSelection();
-     		 });
-    </script>
     
     
   <script>
@@ -394,7 +430,7 @@
  		
  		</script>
 		<script>
-       		 $.backstretch("<c:url value="/resource/images/pill-bg.jpg"/>", {speed: 500});
+       		 $.backstretch("<c:url value='/resource/images/pill-bg.jpg'/>", {speed: 500});
     	</script>
 						
 </body>

@@ -29,14 +29,7 @@
             <a class="top-menu" ><img src="<c:url value="/resource/images/logo-drug.png"/>" alt="" /></a>           
             <a class="logo" href="${pageContext.request.contextPath}/"><b>PREVMED</b></a>                                                       
             </div> 
-            <div align="center">
-            <c:forEach var="error" items="${errors}">
-						<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i>
-						  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						  <strong>Atenção! </strong>${error.message}
-						</div>      				      				
-			</c:forEach>
-			</div>  
+            
             <!--logo end-->   
             
                               
@@ -55,6 +48,14 @@
 	                        <div class="pull-left"><h5><i class="fa fa-tasks"></i>  Selecione os medicamentos para análise</h5></div>
 	                       <br>
 	                        <hr>
+	                        <div align="center">
+            <c:forEach var="error" items="${errors}">
+						<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i>
+						  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						  <strong>Atenção! </strong>${error.message}
+						</div>      				      				
+			</c:forEach>
+			</div>  
 	                        <br>
 	                 	</div>
 	                 	<form id=form-geral action="${pageContext.request.contextPath}/resultado" method="post">
@@ -63,9 +64,10 @@
                                  
                                   <table id="tdinx" class="table table-hover custom-check">                                    
                                     <thead>
-        							<tr>          							
-           								 <th align="center"><i class="fa fa-medkit"></i> Medicamento</th> 
-           								 <th align="center"><i class="fa fa-calendar"></i> Data de cadastro</th>            								          								       							 
+        							<tr> 
+        								       							
+           								 <th ><input type="checkbox" id="marcarTodos"> - <i class="fa fa-medkit"></i> Medicamento</th> 
+           								 <th ><i class="fa fa-calendar"></i> Data de cadastro</th>            								          								       							 
         							</tr>
     								</thead>
                                     <tbody>
@@ -99,6 +101,15 @@
                       </section>
                   </div><!--/col-md-12 -->
               </div><!-- /row -->
+              
+              <footer class="site-footer">
+          <div class="text-center">
+              2016 - Ton Santos
+              <a href="#" class="go-top">
+                  <i class="fa fa-angle-up"></i>
+              </a>
+          </div>
+      </footer>
 				  								              		   			 	
  </section>
 		   	</div>		      		      	 			  		
@@ -107,9 +118,9 @@
     	<script src="http://malsup.github.com/jquery.form.js"></script> 
     	
  		<script src="<c:url value="/resource/js/jquery.js"/>"></script>
- 		<script src="<c:url value="/resource/js/bootstrap.min.js"/>"></script>
- 		<script src="<c:url value="/resource/js/jquery.blockUI.js" />" ></script>
- 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script> 		      	
+ 		<script src="<c:url value="/resource/js/bootstrap.min.js"/>"></script>		
+ 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script> 	
+ 		<script src="<c:url value="/resource/js/jquery.blockUI.js" />" ></script>	      	
  		<script src="<c:url value="/resource/js/jquery-table.js" />" ></script>
 
  		<script type="text/javascript" src="<c:url value="/resource/js/jquery.quick.search.js" />" ></script>	
@@ -127,26 +138,12 @@
  		<script>
  		jQuery('#tdinx input:checkbox').change(function() {
  	       if(this.checked){
- 	    	  jQuery(this).parents("tr").css('background-color', '#5cb85c');	    	   	 
+ 	    	  jQuery(this).parents("tr td").css('background-color', '#5cb85c');	    	   	 
  	 	       }else{
- 	 	      jQuery(this).parents("tr").css('background-color', '#fff');    
+ 	 	      jQuery(this).parents("tr td").css('background-color', '#fff');    
  	 	 	       }  // check if checkbox checked then change color of row
  	    });
  		</script>
- 		
- 		
- 		
- 		
- 		<script>
-      		jQuery(document).ready(function() {
-         	 TaskList.initTaskWidget();
-     		 });
-
-      		$(function() {
-          		$( "#sortable" ).sortable();
-          		$( "#sortable" ).disableSelection();
-     		 });
-    </script>
     
     
   <script>
@@ -180,6 +177,34 @@
  		    
  		});
 		</script> 
+		
+		<script type="text/javascript">
+		$("#marcarTodos").click(toggleMarcarTodos);
+
+		function toggleMarcarTodos(event) {
+		    var $tabela = $("#tdinx");
+		    var check = $("#marcarTodos", $tabela).is(':checked');
+		    var $checks = $('.list-child', $tabela);
+		    
+		    // Se a sua coluna tiver ordenacao, tem que prevenir de ordenar ao clicar no checkbox! 
+		    event && event.stopPropagation();
+		    
+		    $checks.each(function () {
+		        $(this).prop("checked", check);
+		    });
+		}
+		
+
+		$(document).ready(function() {
+		    $('#tdinx').dataTable({"sPaginationType": "full_numbers"});
+		    
+		    // Ao ordernar e paginar, tem que corrigir o estado dos checkboxe's
+		    $('#tdinx').on('page.dt, order.dt', function () {
+		        setTimeout(toggleMarcarTodos, 1);
+		    });
+		});
+		</script>
+		
 	<script>
         $.backstretch("<c:url value="/resource/images/pill-bg.jpg"/>", {speed: 500});
     </script>

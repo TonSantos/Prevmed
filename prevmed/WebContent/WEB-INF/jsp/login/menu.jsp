@@ -52,7 +52,9 @@
       <!-- **********************************************************************************************************************************************************
       MAIN CONTENT
       *********************************************************************************************************************************************************** -->
- <div id="login-page">
+
+	  
+	  <div id="login-page">
 	  	<div class="container">
 	  	
 		      <form class="form-login" action="${pageContext.request.contextPath}/setor-adminstrativo" method="post">
@@ -63,9 +65,6 @@
 		            
 		            <button class="btn btn-theme btn-lg btn-block" name=esc value=2><i class="fa fa-clipboard"></i> INTERAÇÕES</button>
 		            <hr>
-		            
-		            <button class="btn btn-theme btn-lg btn-block" name=esc value=3><i class="fa fa-user-md"></i> MEMBROS</button>
-		            <hr>
 		            		        
 		
 		        </div>
@@ -74,9 +73,6 @@
 	  	
 	  	</div>
 	  </div>
-	 
-	  	
-	  
 
     <!-- js placed at the end of the document so the pages load faster -->
       

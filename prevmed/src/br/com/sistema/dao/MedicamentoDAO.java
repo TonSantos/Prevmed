@@ -85,12 +85,7 @@ public class MedicamentoDAO {
 		boolean status = false;
 			
 		session = Sessao.getSessao();//abre sessao
-		Transaction tx = session.beginTransaction(); 	
-		 	/*if(deletarMedicamento(medicamento.getId())){
-		 		
-		 		session = Sessao.getSessao();//abre sessao
-			 	System.out.println("salvar medicamento!");
-			 	Transaction tx = session.beginTransaction();	*/	 	
+		Transaction tx = session.beginTransaction(); 		
 		 	
 		 	try{
 		 		medicamento.setDataCriacao();
@@ -99,11 +94,9 @@ public class MedicamentoDAO {
 			 	session.clear();
 			 	 status = true;
 	        }catch(HibernateException he){
-	            System.out.println("Exceção em Banco de dados - atualizar Medicamento");
-	           
+	            System.out.println("Exceção em Banco de dados - atualizar Medicamento");	           
 	        }
-		 	
-		 	
+		 		
 			session.disconnect();			
 			session.close();					
 			System.out.println("fechado sessao!!");

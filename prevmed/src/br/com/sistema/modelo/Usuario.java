@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**CLASSE ENTIDADE Usuario**/
 @Entity
@@ -26,6 +27,9 @@ public class Usuario {
 	private String email;	
 	private String senha;
 	private Calendar dataAcesso;
+	
+	@Transient
+	private String dataExibivel;
 	
 	public long getId() {
 		return id;
@@ -56,6 +60,12 @@ public class Usuario {
 	}
 	public void setDataAcesso(Calendar dataAcesso) {
 		this.dataAcesso = dataAcesso;
+	}
+	public String getDataExibivel() {
+		return dataExibivel;
+	}
+	public void setDataExibivel(String dataExibivel) {
+		this.dataExibivel = dataExibivel;
 	}
 	
 		

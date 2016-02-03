@@ -39,6 +39,11 @@ public class LoginController {
 	public void setores() {
 	
 	}	
+	@Post("/menu")
+	public void menu() {
+	
+	}	
+	
 	@Public
 	@Post("/setor-adminstrativo")
 	public void opcao(int esc){	
@@ -68,14 +73,19 @@ public class LoginController {
 			result.forwardTo(UsuarioController.class).resultadoInteracoes();
 		}else if(esc==3){
 			//...carregar usuarios do sistema
+			UsuarioDAO dao = new UsuarioDAO();
+			ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+			usuarios = dao.listaUsuarios();
+			result.include("user", usuarioWeb.getNome());
+			result.include("usuarios", usuarios);
+			result.forwardTo(UsuarioController.class).listaUsuarios();
+			
 		}else{
 			result.include("user", usuarioWeb.getNome());	
-		 	result.forwardTo(this).setores();
+		 	result.forwardTo(this).menu();
 		}
 			 
 		 }		
-		 				
-	
 	
 	@Public
 	@Path("/login")
@@ -97,29 +107,33 @@ public class LoginController {
 			 validator.onErrorRedirectTo(this).login();
 	 
 		 }else{
-			/** //carregar medicamentos
-				MedicamentoDAO mdao = new MedicamentoDAO();
-				ArrayList<Medicamento> medicamentos = new ArrayList<Medicamento>();			
-				medicamentos = mdao.retornaMedicamentos();**/
-				
-			 	usuarioWeb.login(usuario);			
-			 //	result.include("medicamentos", medicamentos);	
-			//	result.forwardTo(UsuarioController.class).adminMedic();
+			 	//atualizar data de acesso
+			 	dao.atualizaUsuario(usuario);
+			 	usuarioWeb.login(usuario);						 
 			 	result.include("user", usuario.getNome());	
-			 	result.forwardTo(this).setores();
-		 }
-		
-		 				
+			 	
+			 	if(usuario.getNome().equals("Admin")){//se for admin
+			 		result.forwardTo(this).setores();
+			 	}else{
+			 		result.forwardTo(this).menu();
+			 	}	
+		 }	 				
 	}
+	
 	@Public
 	@Path("/painel")
 	public void direcionar(){
-		if(usuarioWeb.isLogado()){
+		if(usuarioWeb.isLogado() && usuarioWeb.getNome().equals("Admin")){
 			result.include("user", usuarioWeb.getNome());	
 			result.forwardTo(this).setores();
+		}else if(usuarioWeb.isLogado()){
+			result.include("user", usuarioWeb.getNome());	
+			result.forwardTo(this).menu();
+			
 		}else{
 			result.forwardTo(this).login();
 		}
+			
 	}
 	
 	public Result getResult() {

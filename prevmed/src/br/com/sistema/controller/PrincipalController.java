@@ -38,9 +38,12 @@ public class PrincipalController {
 	@Public
 	@Get("/")
 	public void inicio(){
-		if(usuarioWeb.isLogado()){
+		if(usuarioWeb.isLogado() && usuarioWeb.getNome().equals("Admin")){
 			result.include("user", usuarioWeb.getNome());	
 			result.forwardTo(LoginController.class).setores();
+		}else if(usuarioWeb.isLogado()){
+			result.include("user", usuarioWeb.getNome());	
+			result.forwardTo(LoginController.class).menu();
 		}else{
 		//metodo que carrega todos os medicamentos no banco
 		MedicamentoDAO dao = new MedicamentoDAO();

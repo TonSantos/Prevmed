@@ -3,6 +3,7 @@ package br.com.sistema.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -19,17 +20,16 @@ public class InteracaoDAO {
 	
 	private Session session;
 
-	public InteracaoDAO() {
-		
-	} 
+	public InteracaoDAO() {} 
 	
 	public boolean salvaInteracao(Interacao interacao){
 		boolean status = false;
 		session = Sessao.getSessao();//abre sessao
 		System.out.println("salvar interacao!");
-		Transaction tx = session.beginTransaction();
+		
+		
 	 
-	//tentar carrega medicamento
+	//tentar carrega interacao
 		Interacao verific1 = (Interacao) session.createCriteria(Interacao.class)
 		.add(Restrictions.eq("id_medicA", interacao.getId_medicA()))
 	      	.add(Restrictions.eq("id_medicB", interacao.getId_medicB()))   	 	    	     
@@ -40,12 +40,19 @@ public class InteracaoDAO {
 	  	      	.add(Restrictions.eq("id_medicB", interacao.getId_medicA()))   	 	    	     
 	  	      	.uniqueResult();
 		
-		if(verific1==null && verific2==null){//se nao existir no banco				
-				session.save(interacao);   //salva a interacao
-				tx.commit();
-				System.out.println("interacao salva!!");				
+		if(verific1==null && verific2==null){//se nao existir no banco
+				if(interacao.getId_medicA()!=interacao.getId_medicB()){// e forem diferentes deles mesmo		
+					try{
+						Transaction tx = session.beginTransaction();
+						session.save(interacao);//salva a interacao
+						tx.commit();
+						System.out.println("interacao salva!!");						
+						status = true;
+					}catch(HibernateException he){
+						 System.out.println("Exceção em Banco de dados - salvar Medicamento");
+					}
 				
-				status = true;
+				}
 				
 		}
 		session.disconnect();			
@@ -55,6 +62,7 @@ public class InteracaoDAO {
 		return status;
 		
 }
+	
 	public ArrayList<Interacao> todasInteracoes(){
 		//retorna todas as interações no banco
 		ArrayList<Interacao> interacoes = new ArrayList<Interacao>();
@@ -79,15 +87,8 @@ public class InteracaoDAO {
 					aux.setGrau(String.valueOf(resultado.get(i)[3]));
 					aux.setId_medicA(Long.parseLong(String.valueOf(resultado.get(i)[4])));
 					aux.setId_medicB(Long.parseLong(String.valueOf(resultado.get(i)[5])));
-					aux.setRecomendacao(String.valueOf(resultado.get(0)[6]));
+					aux.setRecomendacao(String.valueOf(resultado.get(i)[6]));
 					
-					System.out.println("[0]:"+resultado.get(i)[0]);//id da interacÃ£o
-					System.out.println("[1]:"+resultado.get(i)[1]);//acao
-					System.out.println("[2]:"+resultado.get(i)[2]);//efeito
-					System.out.println("[3]:"+resultado.get(i)[3]);//grau
-					System.out.println("[4]:"+resultado.get(i)[4]);//medicaA
-					System.out.println("[5]:"+resultado.get(i)[5]);//medicaB
-					System.out.println("[6]:"+resultado.get(i)[6]);//recomendacoes
 					
 					MedicamentoDAO dao = new MedicamentoDAO();
 					String nomeA = dao.nomeMedicamento(Long.parseLong(String.valueOf(resultado.get(i)[4])));
@@ -116,6 +117,7 @@ public class InteracaoDAO {
 		 return interacoes;
 		
 	}
+	
 	public ArrayList<Interacao> retornaInteracao(List<Long> selecionados){
 		
 		//para dois ou mais medicamentos
@@ -147,14 +149,6 @@ public class InteracaoDAO {
 						aux.setId_medicB(Long.parseLong(String.valueOf(resultado.get(0)[5])));
 						aux.setRecomendacao(String.valueOf(resultado.get(0)[6]));
 						
-						System.out.println("[0]:"+resultado.get(0)[0]);//id da interacÃ£o
-						System.out.println("[1]:"+resultado.get(0)[1]);//acao
-						System.out.println("[2]:"+resultado.get(0)[2]);//efeito
-						System.out.println("[3]:"+resultado.get(0)[3]);//grau
-						System.out.println("[4]:"+resultado.get(0)[4]);//medicaA
-						System.out.println("[5]:"+resultado.get(0)[5]);//medicaB
-						System.out.println("[6]:"+resultado.get(0)[6]);//recomendacoes
-						
 						MedicamentoDAO dao = new MedicamentoDAO();
 						String nomeA = dao.nomeMedicamento(Long.parseLong(String.valueOf(resultado.get(0)[4])));
 						String nomeB = dao.nomeMedicamento(Long.parseLong(String.valueOf(resultado.get(0)[5])));
@@ -182,6 +176,7 @@ public class InteracaoDAO {
 				return interacoes;
 
 	}
+	
 	public ArrayList<Interacao> umInteracao(Long selecionado){
 		
 		//todas as interações de um determinado medicamento
@@ -209,14 +204,6 @@ public class InteracaoDAO {
 						aux.setId_medicA(Long.parseLong(String.valueOf(resultado.get(i)[4])));
 						aux.setId_medicB(Long.parseLong(String.valueOf(resultado.get(i)[5])));
 						aux.setRecomendacao(String.valueOf(resultado.get(i)[6]));
-						
-						System.out.println("[0]:"+resultado.get(i)[0]);//id da interacÃ£o
-						System.out.println("[1]:"+resultado.get(i)[1]);//acao
-						System.out.println("[2]:"+resultado.get(i)[2]);//efeito
-						System.out.println("[3]:"+resultado.get(i)[3]);//grau
-						System.out.println("[4]:"+resultado.get(i)[4]);//medicaA
-						System.out.println("[5]:"+resultado.get(i)[5]);//medicaB
-						System.out.println("[6]:"+resultado.get(i)[6]);//recomendacoes
 						
 						MedicamentoDAO dao = new MedicamentoDAO();
 						String nomeA = dao.nomeMedicamento(Long.parseLong(String.valueOf(resultado.get(i)[4])));
@@ -246,8 +233,28 @@ public class InteracaoDAO {
 
 	}
 	
-	public void atualizarInteracao(Interacao interacao){
+	public boolean atualizarInteracao(Interacao interacao){
+		boolean status = false;
 		
+		session = Sessao.getSessao();//abre sessao
+		Transaction tx = session.beginTransaction(); 		
+		 	if(interacao.getId_medicA()!=interacao.getId_medicB()){
+		 		try{
+		 		
+		 			session.update(interacao);
+		 			tx.commit();
+		 			session.clear();
+		 			status = true;
+		 		}catch(HibernateException he){
+	            System.out.println("Exceção em Banco de dados - atualizar Medicamento");
+	           
+		 		}
+		 	
+		 	}
+			session.disconnect();			
+			session.close();					
+			System.out.println("fechado sessao!!");
+			return status;
 	}
 	
 	public boolean deletarInteracao(Long idInteracao){
@@ -261,11 +268,16 @@ public class InteracaoDAO {
 	    	      .uniqueResult();
 		
 		if(verific!=null){//se existe esse interacao deleta
-			Transaction tx = session.beginTransaction();  
-	        session.delete(verific);  
-	        tx.commit();  
-		    
-		    status = true;
+			try{
+				Transaction tx = session.beginTransaction();  
+		        session.delete(verific);  
+		        tx.commit();  
+			    
+			    status = true;
+			}catch(HibernateException he){
+				 System.out.println("Exceção em Banco de dados - apagar Medicamento");
+			}
+			
 		}
 			
 		session.close();

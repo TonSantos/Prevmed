@@ -29,17 +29,7 @@
             <div align="left">               
             <a class="top-menu" ><img src="<c:url value="/resource/images/logo-drug.png"/>" alt="" /></a>           
             <a class="logo" href="${pageContext.request.contextPath}/"><b>PREVMED</b></a>                                              
-            </div> 
-            <div align="center">
-            <c:forEach var="error" items="${errors}">
-						<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i>
-						  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						  <strong>Atenção! </strong>${error.message}
-						</div>      				      				
-			</c:forEach>
-			</div>  
-            
-            
+            </div>          
                           
        </header>
       <!--header end-->
@@ -120,7 +110,14 @@
                       </section>
                   </div><!--/col-md-12 -->
               </div><!-- /row -->
-				  								              		   			 	
+				  <footer class="site-footer">
+          <div class="text-center">
+              2016 - Ton Santos
+              <a href="#" class="go-top">
+                  <i class="fa fa-angle-up"></i>
+              </a>
+          </div>
+      </footer>								              		   			 	
  </section>
 		   			      		      	 			  		
 	 	</div>		 
